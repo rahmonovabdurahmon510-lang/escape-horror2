@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ESCAPE EP2: Qorong‘i Koridor</title>
+
+<style>
+html,body{
+  margin:0;
+  padding:0;
+  background:#000;
+  overflow:hidden;
+  font-family:Arial, sans-serif;
+}
+
+#game{
+  width:100vw;
+  height:100vh;
+  position:relative;
+  background:#000;
+  touch-action:none;
+}
+
+#light{
+  position:absolute;
+  width:300px;
+  height:300px;
+  border-radius:50%;
+  pointer-events:none;
+  background:radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.95) 70%);
+  mix-blend-mode:screen;
+}
+
+#text{
+  position:absolute;
+  bottom:5%;
+  width:100%;
+  text-align:center;
+  color:#aaa;
+  font-size:16px;
+}
+
+#shadow{
+  position:absolute;
+  top:30%;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:120px;
+  opacity:0;
+  transition:opacity 0.1s;
+}
+
+#start{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#000;
+  color:#aaa;
+  font-size:18px;
+}
+
+</style>
+</head>
+<body>
+
+<div id="game">
+  <div id="shadow">👤</div>
+  <div id="light"></div>
+  <div id="text"></div>
+  <div id="start">Ekranga teg → QO‘RQINCHLI KORIDORGA KIR</div>
+</div>
+
+<audio id="amb" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/11/21/audio_2b7e6e0a36.mp3">
+</audio>
+
+<audio id="step">
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_4d6c9a1c6a.mp3">
+</audio>
+
+<audio id="scream">
+  <source src="https://cdn.pixabay.com/audio/2021/08/04/audio_6fdd63c8e1.mp3">
+</audio>
+
+<script>
+const game=document.getElementById("game");
+const light=document.getElementById("light");
+const text=document.getElementById("text");
+const shadow=document.getElementById("shadow");
+const start=document.getElementById("start");
+
+const amb=document.getElementById("amb");
+const step=document.getElementById("step");
+const scream=document.getElementById("scream");
+
+let fear=0;
+let active=false;
+
+start.addEventListener("click",()=>{
+  start.style.display="none";
+  amb.volume=0.5;
+  amb.play();
+  text.innerText="Fonaring titrayapti. Oldinga yur.";
+  active=true;
+});
+
+game.addEventListener("touchmove",e=>{
+  if(!active) return;
+  const t=e.touches[0];
+  light.style.left=(t.clientX-150)+"px";
+  light.style.top=(t.clientY-150)+"px";
+});
+
+setInterval(()=>{
+  if(!active) return;
+  fear++;
+  if(fear===3){
+    text.innerText="Koridor juda jim… juda jim.";
+    step.play();
+  }
+  if(fear===6){
+    shadow.style.opacity=0.4;
+    setTimeout(()=>shadow.style.opacity=0,200);
+  }
+  if(fear===9){
+    scream.play();
+    shadow.style.opacity=1;
+    text.innerText="ORTINGDA!";
+    setTimeout(()=>{
+      document.body.style.background="#000";
+      text.innerText="QOCHISHGA ULGUIRMADING.";
+    },600);
+  }
+},2000);
+</script>
+
+</body>
+</html>
